@@ -4,10 +4,8 @@
   "description": "Claude Code を使用してブラウザ上で動くスネークゲームを作るための検証プロジェクトです。",
   "main": "script.js",
   "scripts": {
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:watch": "vitest --watch",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest run",
+    "tscheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
