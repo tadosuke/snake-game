@@ -1,23 +1,31 @@
-/** @type {HTMLCanvasElement} */
-const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById("gameCanvas"));
-/** @type {CanvasRenderingContext2D} */
+const canvas = /** @type {HTMLCanvasElement} */ (
+  document.getElementById("gameCanvas")
+);
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
-/** @type {HTMLElement} */
-const scoreElement = /** @type {HTMLElement} */ (document.getElementById("score"));
-/** @type {HTMLElement} */
-const gameOverElement = /** @type {HTMLElement} */ (document.getElementById("gameOver"));
-/** @type {HTMLElement} */
-const gameScreen = /** @type {HTMLElement} */ (document.getElementById("gameScreen"));
-/** @type {HTMLElement} */
-const backToTitleBtn = /** @type {HTMLElement} */ (document.getElementById("backToTitleBtn"));
-/** @type {HTMLElement} */
-const gameInstructions = /** @type {HTMLElement} */ (document.getElementById("gameInstructions"));
-/** @type {HTMLElement} */
-const titleScreen = /** @type {HTMLElement} */ (document.getElementById("titleScreen"));
-/** @type {HTMLElement} */
-const onePlayerBtn = /** @type {HTMLElement} */ (document.getElementById("onePlayerBtn"));
-/** @type {HTMLElement} */
-const twoPlayerBtn = /** @type {HTMLElement} */ (document.getElementById("twoPlayerBtn"));
+const scoreElement = /** @type {HTMLElement} */ (
+  document.getElementById("score")
+);
+const gameOverElement = /** @type {HTMLElement} */ (
+  document.getElementById("gameOver")
+);
+const gameScreen = /** @type {HTMLElement} */ (
+  document.getElementById("gameScreen")
+);
+const backToTitleBtn = /** @type {HTMLElement} */ (
+  document.getElementById("backToTitleBtn")
+);
+const gameInstructions = /** @type {HTMLElement} */ (
+  document.getElementById("gameInstructions")
+);
+const titleScreen = /** @type {HTMLElement} */ (
+  document.getElementById("titleScreen")
+);
+const onePlayerBtn = /** @type {HTMLElement} */ (
+  document.getElementById("onePlayerBtn")
+);
+const twoPlayerBtn = /** @type {HTMLElement} */ (
+  document.getElementById("twoPlayerBtn")
+);
 
 /** @type {number} 各グリッドセルのピクセルサイズ */
 const gridSize = 20;
@@ -51,17 +59,18 @@ let shadowTrail2 = [];
  */
 function startGame(players) {
   playerCount = players;
-  gameState = 'playing';
-  titleScreen.style.display = 'none';
-  gameScreen.style.display = 'block';
-  
+  gameState = "playing";
+  titleScreen.style.display = "none";
+  gameScreen.style.display = "block";
+
   // プレイヤー数に応じて操作説明を更新
   if (playerCount === 1) {
     gameInstructions.textContent = "矢印キーで操作 | Spaceキーでリスタート";
   } else {
-    gameInstructions.textContent = "プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート";
+    gameInstructions.textContent =
+      "プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート";
   }
-  
+
   resetGame();
 }
 
@@ -75,15 +84,15 @@ function generateFood() {
     let validPosition = false;
     /** @type {{x: number, y: number}} */
     let newFood = { x: 0, y: 0 };
-    
+
     while (!validPosition) {
       newFood = {
         x: Math.floor(Math.random() * tileCount),
         y: Math.floor(Math.random() * tileCount),
       };
-      
+
       validPosition = true;
-      
+
       // スネーク1との衝突チェック
       for (let segment of snake1) {
         if (newFood.x === segment.x && newFood.y === segment.y) {
@@ -91,7 +100,7 @@ function generateFood() {
           break;
         }
       }
-      
+
       // スネーク2との衝突チェック
       if (validPosition) {
         for (let segment of snake2) {
@@ -101,7 +110,7 @@ function generateFood() {
           }
         }
       }
-      
+
       // 既存の食べ物との衝突チェック
       if (validPosition) {
         for (let existingFood of foods) {
@@ -112,7 +121,7 @@ function generateFood() {
         }
       }
     }
-    
+
     foods.push(newFood);
   }
 }
@@ -233,7 +242,7 @@ function moveSnake1() {
       break;
     }
   }
-  
+
   if (ateFood) {
     generateFood(); // 新しい食べ物を生成
   } else {
@@ -288,7 +297,7 @@ function moveSnake2() {
       break;
     }
   }
-  
+
   if (ateFood) {
     generateFood(); // 新しい食べ物を生成
   } else {
@@ -307,7 +316,7 @@ function moveSnake2() {
  */
 function gameOver() {
   gameRunning = false;
-  gameState = 'gameOver';
+  gameState = "gameOver";
   gameOverElement.style.display = "block";
 }
 
@@ -324,7 +333,7 @@ function resetGame() {
   score = 0;
   scoreElement.textContent = score.toString();
   gameRunning = true;
-  gameState = 'playing';
+  gameState = "playing";
   gameOverElement.style.display = "none";
   shadowTrail1 = [];
   shadowTrail2 = [];
@@ -336,7 +345,7 @@ function resetGame() {
  * スネークの位置を更新し、ゲームを再描画するメインゲームループ
  */
 function gameLoop() {
-  if (gameState === 'playing') {
+  if (gameState === "playing") {
     moveSnake1();
     if (playerCount === 2) {
       moveSnake2();
@@ -350,13 +359,13 @@ function gameLoop() {
  * @param {KeyboardEvent} e - キーボードイベント
  */
 document.addEventListener("keydown", (e) => {
-  if (gameState === 'gameOver' && e.code === "Space") {
+  if (gameState === "gameOver" && e.code === "Space") {
     e.preventDefault();
     resetGame();
     return;
   }
 
-  if (gameState !== 'playing') return;
+  if (gameState !== "playing") return;
 
   switch (e.code) {
     // Player 1 controls (Arrow keys)
@@ -388,7 +397,7 @@ document.addEventListener("keydown", (e) => {
         dy1 = 0;
       }
       break;
-    
+
     // Player 2 controls (WASD keys) - only in 2-player mode
     case "KeyW":
       if (playerCount === 2) {
@@ -430,9 +439,9 @@ document.addEventListener("keydown", (e) => {
 });
 
 // バックボタンイベントリスナーを追加
-backToTitleBtn.addEventListener('click', () => {
-  gameState = 'title';
-  titleScreen.style.display = 'block';
-  gameScreen.style.display = 'none';
+backToTitleBtn.addEventListener("click", () => {
+  gameState = "title";
+  titleScreen.style.display = "block";
+  gameScreen.style.display = "none";
   gameRunning = false;
 });
