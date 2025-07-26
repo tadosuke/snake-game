@@ -8,10 +8,29 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="score">スコア: <span id="score">0</span></div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
-        <div id="gameOver" class="game-over" style="display: none;">ゲームオーバー！Spaceキーでリスタート</div>
-        <div class="instructions">プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート</div>
+        <!-- タイトル画面 -->
+        <div id="titleScreen" class="title-screen">
+            <h1 class="title">スネークゲーム</h1>
+            <div class="player-selection">
+                <button id="onePlayerBtn" class="player-btn">1プレイヤー</button>
+                <button id="twoPlayerBtn" class="player-btn">2プレイヤー</button>
+            </div>
+            <div class="title-instructions">
+                <p>1プレイヤー: 矢印キーで操作</p>
+                <p>2プレイヤー: プレイヤー1（矢印キー・緑）、プレイヤー2（WASD・青）</p>
+            </div>
+        </div>
+
+        <!-- ゲーム画面 -->
+        <div id="gameScreen" class="game-screen" style="display: none;">
+            <div class="score">スコア: <span id="score">0</span></div>
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+            <div id="gameOver" class="game-over" style="display: none;">ゲームオーバー！Spaceキーでリスタート</div>
+            <div class="instructions">
+                <span id="gameInstructions">プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート</span>
+                <button id="backToTitleBtn" class="back-btn">タイトルに戻る</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
