@@ -6,6 +6,18 @@ const ctx = canvas.getContext("2d");
 const scoreElement = document.getElementById("score");
 /** @type {HTMLElement} */
 const gameOverElement = document.getElementById("gameOver");
+/** @type {HTMLElement} */
+const titleScreen = document.getElementById("titleScreen");
+/** @type {HTMLElement} */
+const gameScreen = document.getElementById("gameScreen");
+/** @type {HTMLElement} */
+const onePlayerBtn = document.getElementById("onePlayerBtn");
+/** @type {HTMLElement} */
+const twoPlayerBtn = document.getElementById("twoPlayerBtn");
+/** @type {HTMLElement} */
+const backToTitleBtn = document.getElementById("backToTitleBtn");
+/** @type {HTMLElement} */
+const gameInstructions = document.getElementById("gameInstructions");
 
 /** @type {number} 各グリッドセルのピクセルサイズ */
 const gridSize = 20;
@@ -29,11 +41,45 @@ let dy2 = 0;
 /** @type {number} 現在のゲームスコア */
 let score = 0;
 /** @type {boolean} ゲームが現在実行中かどうか */
-let gameRunning = true;
+let gameRunning = false;
+/** @type {string} 現在のゲーム状態 ('title' | 'playing' | 'gameOver') */
+let gameState = 'title';
+/** @type {number} プレイヤー数 (1 または 2) */
+let playerCount = 1;
 /** @type {Array<{x: number, y: number}>} プレイヤー1の影の軌跡位置の配列 */
 let shadowTrail1 = [];
 /** @type {Array<{x: number, y: number}>} プレイヤー2の影の軌跡位置の配列 */
 let shadowTrail2 = [];
+
+/**
+ * タイトル画面を表示する
+ */
+function showTitleScreen() {
+  gameState = 'title';
+  titleScreen.style.display = 'block';
+  gameScreen.style.display = 'none';
+  gameRunning = false;
+}
+
+/**
+ * ゲーム画面を表示し、ゲームを開始する
+ * @param {number} players - プレイヤー数 (1 または 2)
+ */
+function startGame(players) {
+  playerCount = players;
+  gameState = 'playing';
+  titleScreen.style.display = 'none';
+  gameScreen.style.display = 'block';
+  
+  // プレイヤー数に応じて操作説明を更新
+  if (playerCount === 1) {
+    gameInstructions.textContent = "矢印キーで操作 | Spaceキーでリスタート";
+  } else {
+    gameInstructions.textContent = "プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート";
+  }
+  
+  resetGame();
+}
 
 /**
  * ゲームグリッド上にランダムな位置で新しい食べ物を生成する
@@ -106,18 +152,20 @@ function drawGame() {
     );
   }
 
-  // Draw player 2 shadow trail with fading effect (blue)
-  for (let i = 0; i < shadowTrail2.length; i++) {
-    const shadow = shadowTrail2[i];
-    const age = i + 1;
-    const opacity = Math.max(0, 1 - age * 0.2);
-    ctx.fillStyle = `rgba(0, 100, 255, ${opacity * 0.75})`;
-    ctx.fillRect(
-      shadow.x * gridSize,
-      shadow.y * gridSize,
-      gridSize - 2,
-      gridSize - 2
-    );
+  // Draw player 2 shadow trail with fading effect (blue) - only in 2-player mode
+  if (playerCount === 2) {
+    for (let i = 0; i < shadowTrail2.length; i++) {
+      const shadow = shadowTrail2[i];
+      const age = i + 1;
+      const opacity = Math.max(0, 1 - age * 0.2);
+      ctx.fillStyle = `rgba(0, 100, 255, ${opacity * 0.75})`;
+      ctx.fillRect(
+        shadow.x * gridSize,
+        shadow.y * gridSize,
+        gridSize - 2,
+        gridSize - 2
+      );
+    }
   }
 
   // Draw player 1 snake (green)
@@ -131,15 +179,17 @@ function drawGame() {
     );
   }
 
-  // Draw player 2 snake (blue)
-  ctx.fillStyle = "blue";
-  for (let segment of snake2) {
-    ctx.fillRect(
-      segment.x * gridSize,
-      segment.y * gridSize,
-      gridSize - 2,
-      gridSize - 2
-    );
+  // Draw player 2 snake (blue) - only in 2-player mode
+  if (playerCount === 2) {
+    ctx.fillStyle = "blue";
+    for (let segment of snake2) {
+      ctx.fillRect(
+        segment.x * gridSize,
+        segment.y * gridSize,
+        gridSize - 2,
+        gridSize - 2
+      );
+    }
   }
 
   // Draw foods
@@ -174,10 +224,13 @@ function moveSnake1() {
     }
   }
 
-  for (let segment of snake2) {
-    if (head.x === segment.x && head.y === segment.y) {
-      gameOver();
-      return;
+  // Check collision with snake2 only in 2-player mode
+  if (playerCount === 2) {
+    for (let segment of snake2) {
+      if (head.x === segment.x && head.y === segment.y) {
+        gameOver();
+        return;
+      }
     }
   }
 
@@ -226,6 +279,7 @@ function moveSnake2() {
     }
   }
 
+  // Check collision with snake1
   for (let segment of snake1) {
     if (head.x === segment.x && head.y === segment.y) {
       gameOver();
@@ -263,6 +317,7 @@ function moveSnake2() {
  */
 function gameOver() {
   gameRunning = false;
+  gameState = 'gameOver';
   gameOverElement.style.display = "block";
 }
 
@@ -279,9 +334,11 @@ function resetGame() {
   score = 0;
   scoreElement.textContent = score;
   gameRunning = true;
+  gameState = 'playing';
   gameOverElement.style.display = "none";
   shadowTrail1 = [];
   shadowTrail2 = [];
+  foods = [];
   generateFood();
 }
 
@@ -289,9 +346,13 @@ function resetGame() {
  * スネークの位置を更新し、ゲームを再描画するメインゲームループ
  */
 function gameLoop() {
-  moveSnake1();
-  moveSnake2();
-  drawGame();
+  if (gameState === 'playing') {
+    moveSnake1();
+    if (playerCount === 2) {
+      moveSnake2();
+    }
+    drawGame();
+  }
 }
 
 /**
@@ -299,13 +360,13 @@ function gameLoop() {
  * @param {KeyboardEvent} e - キーボードイベント
  */
 document.addEventListener("keydown", (e) => {
-  if (!gameRunning && e.code === "Space") {
+  if (gameState === 'gameOver' && e.code === "Space") {
     e.preventDefault();
     resetGame();
     return;
   }
 
-  if (!gameRunning) return;
+  if (gameState !== 'playing') return;
 
   switch (e.code) {
     // Player 1 controls (Arrow keys)
@@ -338,38 +399,53 @@ document.addEventListener("keydown", (e) => {
       }
       break;
     
-    // Player 2 controls (WASD keys)
+    // Player 2 controls (WASD keys) - only in 2-player mode
     case "KeyW":
-      e.preventDefault();
-      if (dy2 !== 1) {
-        dx2 = 0;
-        dy2 = -1;
+      if (playerCount === 2) {
+        e.preventDefault();
+        if (dy2 !== 1) {
+          dx2 = 0;
+          dy2 = -1;
+        }
       }
       break;
     case "KeyS":
-      e.preventDefault();
-      if (dy2 !== -1) {
-        dx2 = 0;
-        dy2 = 1;
+      if (playerCount === 2) {
+        e.preventDefault();
+        if (dy2 !== -1) {
+          dx2 = 0;
+          dy2 = 1;
+        }
       }
       break;
     case "KeyA":
-      e.preventDefault();
-      if (dx2 !== 1) {
-        dx2 = -1;
-        dy2 = 0;
+      if (playerCount === 2) {
+        e.preventDefault();
+        if (dx2 !== 1) {
+          dx2 = -1;
+          dy2 = 0;
+        }
       }
       break;
     case "KeyD":
-      e.preventDefault();
-      if (dx2 !== -1) {
-        dx2 = 1;
-        dy2 = 0;
+      if (playerCount === 2) {
+        e.preventDefault();
+        if (dx2 !== -1) {
+          dx2 = 1;
+          dy2 = 0;
+        }
       }
       break;
   }
 });
 
-// ゲームを初期化
-generateFood();
+// ボタンイベントリスナーを追加
+onePlayerBtn.addEventListener('click', () => startGame(1));
+twoPlayerBtn.addEventListener('click', () => startGame(2));
+backToTitleBtn.addEventListener('click', showTitleScreen);
+
+// ゲームループを開始
 setInterval(gameLoop, 100);
+
+// 初期状態でタイトル画面を表示
+showTitleScreen();
