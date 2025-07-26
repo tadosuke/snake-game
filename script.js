@@ -14,6 +14,7 @@ let dx = 0;
 let dy = 0;
 let score = 0;
 let gameRunning = true;
+let shadowTrail = [];
 
 function generateFood() {
     food = {
@@ -25,6 +26,15 @@ function generateFood() {
 function drawGame() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw shadow trail with fading effect
+    for (let i = 0; i < shadowTrail.length; i++) {
+        const shadow = shadowTrail[i];
+        const age = i + 1;
+        const opacity = Math.max(0, (6 - age) / 5); // Fade from 1 to 0 over 5 squares
+        ctx.fillStyle = `rgba(0, 100, 0, ${opacity * 0.3})`;
+        ctx.fillRect(shadow.x * gridSize, shadow.y * gridSize, gridSize - 2, gridSize - 2);
+    }
 
     ctx.fillStyle = 'lime';
     for (let segment of snake) {
@@ -54,6 +64,15 @@ function moveSnake() {
 
     snake.unshift(head);
 
+    // Add previous head position to shadow trail
+    if (snake.length > 1) {
+        shadowTrail.unshift({x: snake[1].x, y: snake[1].y});
+        // Keep only 5 shadow squares
+        if (shadowTrail.length > 5) {
+            shadowTrail.pop();
+        }
+    }
+
     if (head.x === food.x && head.y === food.y) {
         score += 10;
         scoreElement.textContent = score;
@@ -76,6 +95,7 @@ function resetGame() {
     scoreElement.textContent = score;
     gameRunning = true;
     gameOverElement.style.display = 'none';
+    shadowTrail = [];
     generateFood();
 }
 
