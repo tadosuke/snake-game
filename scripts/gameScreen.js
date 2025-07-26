@@ -1,17 +1,23 @@
 /** @type {HTMLCanvasElement} */
-const canvas = document.getElementById("gameCanvas");
+const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById("gameCanvas"));
 /** @type {CanvasRenderingContext2D} */
-const ctx = canvas.getContext("2d");
+const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
 /** @type {HTMLElement} */
-const scoreElement = document.getElementById("score");
+const scoreElement = /** @type {HTMLElement} */ (document.getElementById("score"));
 /** @type {HTMLElement} */
-const gameOverElement = document.getElementById("gameOver");
+const gameOverElement = /** @type {HTMLElement} */ (document.getElementById("gameOver"));
 /** @type {HTMLElement} */
-const gameScreen = document.getElementById("gameScreen");
+const gameScreen = /** @type {HTMLElement} */ (document.getElementById("gameScreen"));
 /** @type {HTMLElement} */
-const backToTitleBtn = document.getElementById("backToTitleBtn");
+const backToTitleBtn = /** @type {HTMLElement} */ (document.getElementById("backToTitleBtn"));
 /** @type {HTMLElement} */
-const gameInstructions = document.getElementById("gameInstructions");
+const gameInstructions = /** @type {HTMLElement} */ (document.getElementById("gameInstructions"));
+/** @type {HTMLElement} */
+const titleScreen = /** @type {HTMLElement} */ (document.getElementById("titleScreen"));
+/** @type {HTMLElement} */
+const onePlayerBtn = /** @type {HTMLElement} */ (document.getElementById("onePlayerBtn"));
+/** @type {HTMLElement} */
+const twoPlayerBtn = /** @type {HTMLElement} */ (document.getElementById("twoPlayerBtn"));
 
 /** @type {number} 各グリッドセルのピクセルサイズ */
 const gridSize = 20;
@@ -67,7 +73,8 @@ function generateFood() {
   const maxFoods = playerCount === 1 ? 1 : 2;
   while (foods.length < maxFoods) {
     let validPosition = false;
-    let newFood;
+    /** @type {{x: number, y: number}} */
+    let newFood = { x: 0, y: 0 };
     
     while (!validPosition) {
       newFood = {
@@ -220,7 +227,7 @@ function moveSnake1() {
   for (let i = foods.length - 1; i >= 0; i--) {
     if (head.x === foods[i].x && head.y === foods[i].y) {
       score += 10;
-      scoreElement.textContent = score;
+      scoreElement.textContent = score.toString();
       foods.splice(i, 1); // 食べた食べ物を削除
       ateFood = true;
       break;
@@ -231,7 +238,9 @@ function moveSnake1() {
     generateFood(); // 新しい食べ物を生成
   } else {
     const tail = snake1.pop();
-    shadowTrail1.unshift({ x: tail.x, y: tail.y });
+    if (tail) {
+      shadowTrail1.unshift({ x: tail.x, y: tail.y });
+    }
     if (shadowTrail1.length > 5) {
       shadowTrail1.pop();
     }
@@ -273,7 +282,7 @@ function moveSnake2() {
   for (let i = foods.length - 1; i >= 0; i--) {
     if (head.x === foods[i].x && head.y === foods[i].y) {
       score += 10;
-      scoreElement.textContent = score;
+      scoreElement.textContent = score.toString();
       foods.splice(i, 1); // 食べた食べ物を削除
       ateFood = true;
       break;
@@ -284,7 +293,9 @@ function moveSnake2() {
     generateFood(); // 新しい食べ物を生成
   } else {
     const tail = snake2.pop();
-    shadowTrail2.unshift({ x: tail.x, y: tail.y });
+    if (tail) {
+      shadowTrail2.unshift({ x: tail.x, y: tail.y });
+    }
     if (shadowTrail2.length > 5) {
       shadowTrail2.pop();
     }
@@ -311,7 +322,7 @@ function resetGame() {
   dx2 = 0;
   dy2 = 0;
   score = 0;
-  scoreElement.textContent = score;
+  scoreElement.textContent = score.toString();
   gameRunning = true;
   gameState = 'playing';
   gameOverElement.style.display = "none";

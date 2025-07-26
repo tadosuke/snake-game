@@ -6,13 +6,15 @@
   "scripts": {
     "test": "vitest",
     "test:run": "vitest run",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jsdom": "^26.1.0",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
 }

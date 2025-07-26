@@ -1,9 +1,4 @@
-/** @type {HTMLElement} */
-const titleScreen = document.getElementById("titleScreen");
-/** @type {HTMLElement} */
-const onePlayerBtn = document.getElementById("onePlayerBtn");
-/** @type {HTMLElement} */
-const twoPlayerBtn = document.getElementById("twoPlayerBtn");
+// DOM elements are declared in gameScreen.js
 
 /**
  * タイトル画面を表示する
