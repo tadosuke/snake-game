@@ -16,8 +16,8 @@ const tileCount = canvas.width / gridSize;
 let snake1 = [{ x: 10, y: 10 }];
 /** @type {Array<{x: number, y: number}>} プレイヤー2のスネークのセグメント配列 */
 let snake2 = [{ x: 20, y: 20 }];
-/** @type {{x: number, y: number}} 食べ物の位置 */
-let food = {};
+/** @type {Array<{x: number, y: number}>} 食べ物の位置配列 */
+let foods = [];
 /** @type {number} プレイヤー1の水平移動方向 */
 let dx1 = 0;
 /** @type {number} プレイヤー1の垂直移動方向 */
@@ -39,28 +39,49 @@ let shadowTrail2 = [];
  * ゲームグリッド上にランダムな位置で新しい食べ物を生成する
  */
 function generateFood() {
-  let validPosition = false;
-  while (!validPosition) {
-    food = {
-      x: Math.floor(Math.random() * tileCount),
-      y: Math.floor(Math.random() * tileCount),
-    };
+  // 最大2つの食べ物まで
+  while (foods.length < 2) {
+    let validPosition = false;
+    let newFood;
     
-    validPosition = true;
-    for (let segment of snake1) {
-      if (food.x === segment.x && food.y === segment.y) {
-        validPosition = false;
-        break;
-      }
-    }
-    if (validPosition) {
-      for (let segment of snake2) {
-        if (food.x === segment.x && food.y === segment.y) {
+    while (!validPosition) {
+      newFood = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount),
+      };
+      
+      validPosition = true;
+      
+      // スネーク1との衝突チェック
+      for (let segment of snake1) {
+        if (newFood.x === segment.x && newFood.y === segment.y) {
           validPosition = false;
           break;
         }
       }
+      
+      // スネーク2との衝突チェック
+      if (validPosition) {
+        for (let segment of snake2) {
+          if (newFood.x === segment.x && newFood.y === segment.y) {
+            validPosition = false;
+            break;
+          }
+        }
+      }
+      
+      // 既存の食べ物との衝突チェック
+      if (validPosition) {
+        for (let existingFood of foods) {
+          if (newFood.x === existingFood.x && newFood.y === existingFood.y) {
+            validPosition = false;
+            break;
+          }
+        }
+      }
     }
+    
+    foods.push(newFood);
   }
 }
 
@@ -121,14 +142,16 @@ function drawGame() {
     );
   }
 
-  // Draw food
+  // Draw foods
   ctx.fillStyle = "red";
-  ctx.fillRect(
-    food.x * gridSize,
-    food.y * gridSize,
-    gridSize - 2,
-    gridSize - 2
-  );
+  for (let food of foods) {
+    ctx.fillRect(
+      food.x * gridSize,
+      food.y * gridSize,
+      gridSize - 2,
+      gridSize - 2
+    );
+  }
 }
 
 /**
@@ -160,10 +183,20 @@ function moveSnake1() {
 
   snake1.unshift(head);
 
-  if (head.x === food.x && head.y === food.y) {
-    score += 10;
-    scoreElement.textContent = score;
-    generateFood();
+  // 複数の食べ物との衝突チェック
+  let ateFood = false;
+  for (let i = foods.length - 1; i >= 0; i--) {
+    if (head.x === foods[i].x && head.y === foods[i].y) {
+      score += 10;
+      scoreElement.textContent = score;
+      foods.splice(i, 1); // 食べた食べ物を削除
+      ateFood = true;
+      break;
+    }
+  }
+  
+  if (ateFood) {
+    generateFood(); // 新しい食べ物を生成
   } else {
     const tail = snake1.pop();
     shadowTrail1.unshift({ x: tail.x, y: tail.y });
@@ -202,10 +235,20 @@ function moveSnake2() {
 
   snake2.unshift(head);
 
-  if (head.x === food.x && head.y === food.y) {
-    score += 10;
-    scoreElement.textContent = score;
-    generateFood();
+  // 複数の食べ物との衝突チェック
+  let ateFood = false;
+  for (let i = foods.length - 1; i >= 0; i--) {
+    if (head.x === foods[i].x && head.y === foods[i].y) {
+      score += 10;
+      scoreElement.textContent = score;
+      foods.splice(i, 1); // 食べた食べ物を削除
+      ateFood = true;
+      break;
+    }
+  }
+  
+  if (ateFood) {
+    generateFood(); // 新しい食べ物を生成
   } else {
     const tail = snake2.pop();
     shadowTrail2.unshift({ x: tail.x, y: tail.y });
