@@ -1,6 +1,9 @@
 # Claude Code local settings
 .claude/settings.local.json
 
+# プロンプトの一時入力ファイル
+.claude/prompt.md
+
 .vscode/settings.json
 
 # Dependencies
