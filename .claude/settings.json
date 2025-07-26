@@ -18,7 +18,9 @@
       "Bash(git merge *)",
       "Bash(git reset *)",
       "Bash(git revert *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(mv *)",
+      "Bash(mkdir *)"
     ]
   }
 }
