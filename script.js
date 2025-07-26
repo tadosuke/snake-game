@@ -118,6 +118,7 @@ function gameLoop() {
 
 document.addEventListener("keydown", (e) => {
   if (!gameRunning && e.code === "Space") {
+    e.preventDefault();
     resetGame();
     return;
   }
@@ -126,24 +127,28 @@ document.addEventListener("keydown", (e) => {
 
   switch (e.code) {
     case "ArrowUp":
+      e.preventDefault();
       if (dy !== 1) {
         dx = 0;
         dy = -1;
       }
       break;
     case "ArrowDown":
+      e.preventDefault();
       if (dy !== -1) {
         dx = 0;
         dy = 1;
       }
       break;
     case "ArrowLeft":
+      e.preventDefault();
       if (dx !== 1) {
         dx = -1;
         dy = 0;
       }
       break;
     case "ArrowRight":
+      e.preventDefault();
       if (dx !== -1) {
         dx = 1;
         dy = 0;
