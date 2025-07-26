@@ -202,6 +202,17 @@ function drawGame() {
       gridSize - 2
     );
   }
+
+  // Draw foods
+  ctx.fillStyle = "red";
+  for (let food of foods) {
+    ctx.fillRect(
+      food.x * gridSize,
+      food.y * gridSize,
+      gridSize - 2,
+      gridSize - 2
+    );
+  }
 }
 
 /**
