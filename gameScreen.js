@@ -418,4 +418,9 @@ document.addEventListener("keydown", (e) => {
 });
 
 // バックボタンイベントリスナーを追加
-backToTitleBtn.addEventListener('click', showTitleScreen);
+backToTitleBtn.addEventListener('click', () => {
+  gameState = 'title';
+  titleScreen.style.display = 'block';
+  gameScreen.style.display = 'none';
+  gameRunning = false;
+});
