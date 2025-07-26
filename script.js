@@ -1,19 +1,35 @@
+/** @type {HTMLCanvasElement} */
 const canvas = document.getElementById("gameCanvas");
+/** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext("2d");
+/** @type {HTMLElement} */
 const scoreElement = document.getElementById("score");
+/** @type {HTMLElement} */
 const gameOverElement = document.getElementById("gameOver");
 
+/** @type {number} 各グリッドセルのピクセルサイズ */
 const gridSize = 20;
+/** @type {number} 行/列あたりのタイル数 */
 const tileCount = canvas.width / gridSize;
 
+/** @type {Array<{x: number, y: number}>} スネークのセグメント配列 */
 let snake = [{ x: 10, y: 10 }];
+/** @type {{x: number, y: number}} 食べ物の位置 */
 let food = {};
+/** @type {number} スネークの水平移動方向 */
 let dx = 0;
+/** @type {number} スネークの垂直移動方向 */
 let dy = 0;
+/** @type {number} 現在のゲームスコア */
 let score = 0;
+/** @type {boolean} ゲームが現在実行中かどうか */
 let gameRunning = true;
+/** @type {Array<{x: number, y: number}>} 影の軌跡位置の配列 */
 let shadowTrail = [];
 
+/**
+ * ゲームグリッド上にランダムな位置で新しい食べ物を生成する
+ */
 function generateFood() {
   food = {
     x: Math.floor(Math.random() * tileCount),
@@ -21,6 +37,9 @@ function generateFood() {
   };
 }
 
+/**
+ * 背景、影の軌跡、スネーク、食べ物を含むゲーム全体をレンダリングする
+ */
 function drawGame() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -58,6 +77,9 @@ function drawGame() {
   );
 }
 
+/**
+ * スネークを一歩前進させ、衝突、食べ物の摂取、スコア更新を処理する
+ */
 function moveSnake() {
   if (!gameRunning || (dx === 0 && dy === 0)) return;
 
@@ -94,11 +116,17 @@ function moveSnake() {
   }
 }
 
+/**
+ * ゲームを終了し、ゲームオーバー画面を表示する
+ */
 function gameOver() {
   gameRunning = false;
   gameOverElement.style.display = "block";
 }
 
+/**
+ * ゲームを初期状態にリセットし、新しいゲームを開始する
+ */
 function resetGame() {
   snake = [{ x: 10, y: 10 }];
   dx = 0;
@@ -111,11 +139,18 @@ function resetGame() {
   generateFood();
 }
 
+/**
+ * スネークの位置を更新し、ゲームを再描画するメインゲームループ
+ */
 function gameLoop() {
   moveSnake();
   drawGame();
 }
 
+/**
+ * スネークの操作とゲームリスタートのためのキーボード入力を処理する
+ * @param {KeyboardEvent} e - キーボードイベント
+ */
 document.addEventListener("keydown", (e) => {
   if (!gameRunning && e.code === "Space") {
     e.preventDefault();
@@ -157,5 +192,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// ゲームを初期化
 generateFood();
 setInterval(gameLoop, 100);
