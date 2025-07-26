@@ -63,8 +63,9 @@ function startGame(players) {
  * ゲームグリッド上にランダムな位置で新しい食べ物を生成する
  */
 function generateFood() {
-  // 最大2つの食べ物まで
-  while (foods.length < 2) {
+  // 1プレイヤーモードでは1つ、2プレイヤーモードでは2つの食べ物まで
+  const maxFoods = playerCount === 1 ? 1 : 2;
+  while (foods.length < maxFoods) {
     let validPosition = false;
     let newFood;
     
