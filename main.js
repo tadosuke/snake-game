@@ -5,5 +5,7 @@ let gameState = 'title';
 /** @type {number} プレイヤー数 (1 または 2) */
 let playerCount = 1;
 
-// ゲームループを開始
-setInterval(gameLoop, 100);
+// DOM読み込み完了後にゲームループを開始
+document.addEventListener('DOMContentLoaded', () => {
+  setInterval(gameLoop, 100);
+});

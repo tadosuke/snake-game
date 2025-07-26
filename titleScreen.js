@@ -19,5 +19,7 @@ function showTitleScreen() {
 onePlayerBtn.addEventListener('click', () => startGame(1));
 twoPlayerBtn.addEventListener('click', () => startGame(2));
 
-// 初期状態でタイトル画面を表示
-showTitleScreen();
+// DOM読み込み完了後にタイトル画面を表示
+document.addEventListener('DOMContentLoaded', () => {
+  showTitleScreen();
+});
