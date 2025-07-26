@@ -1,13 +1,17 @@
+import { GAME_STATE_TITLE } from './constants.js';
+import { startGame, titleScreen, gameScreen, onePlayerBtn, twoPlayerBtn } from './gameScreen.js';
+import { setGameState, setGameRunning } from './main.js';
+
 // DOM elements are declared in gameScreen.js
 
 /**
  * タイトル画面を表示する
  */
 function showTitleScreen() {
-  gameState = 'title';
+  setGameState(GAME_STATE_TITLE);
   titleScreen.style.display = 'block';
   gameScreen.style.display = 'none';
-  gameRunning = false;
+  setGameRunning(false);
 }
 
 // ボタンイベントリスナーを追加

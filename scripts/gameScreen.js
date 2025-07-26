@@ -1,3 +1,23 @@
+import {
+  GRID_SIZE,
+  FOOD_SCORE,
+  MAX_SHADOW_TRAIL_LENGTH,
+  SHADOW_OPACITY_DECAY,
+  GAME_STATE_PLAYING,
+  GAME_STATE_GAME_OVER,
+  GAME_STATE_TITLE,
+  PLAYER1_INITIAL_POSITION,
+  PLAYER2_INITIAL_POSITION,
+  PLAYER1_COLOR,
+  PLAYER2_COLOR,
+  FOOD_COLOR,
+  BACKGROUND_COLOR,
+  PLAYER1_SHADOW_COLOR_BASE,
+  PLAYER2_SHADOW_COLOR_BASE,
+  GRID_BORDER_SIZE
+} from './constants.js';
+import { setPlayerCount, setGameState, setGameRunning, playerCount, gameRunning, gameState } from './main.js';
+
 const canvas = /** @type {HTMLCanvasElement} */ (
   document.getElementById("gameCanvas")
 );
@@ -8,7 +28,7 @@ const scoreElement = /** @type {HTMLElement} */ (
 const gameOverElement = /** @type {HTMLElement} */ (
   document.getElementById("gameOver")
 );
-const gameScreen = /** @type {HTMLElement} */ (
+export const gameScreen = /** @type {HTMLElement} */ (
   document.getElementById("gameScreen")
 );
 const backToTitleBtn = /** @type {HTMLElement} */ (
@@ -17,25 +37,23 @@ const backToTitleBtn = /** @type {HTMLElement} */ (
 const gameInstructions = /** @type {HTMLElement} */ (
   document.getElementById("gameInstructions")
 );
-const titleScreen = /** @type {HTMLElement} */ (
+export const titleScreen = /** @type {HTMLElement} */ (
   document.getElementById("titleScreen")
 );
-const onePlayerBtn = /** @type {HTMLElement} */ (
+export const onePlayerBtn = /** @type {HTMLElement} */ (
   document.getElementById("onePlayerBtn")
 );
-const twoPlayerBtn = /** @type {HTMLElement} */ (
+export const twoPlayerBtn = /** @type {HTMLElement} */ (
   document.getElementById("twoPlayerBtn")
 );
 
-/** @type {number} 各グリッドセルのピクセルサイズ */
-const gridSize = 20;
 /** @type {number} 行/列あたりのタイル数 */
-const tileCount = canvas.width / gridSize;
+const tileCount = canvas.width / GRID_SIZE;
 
 /** @type {Array<{x: number, y: number}>} プレイヤー1のスネークのセグメント配列 */
-let snake1 = [{ x: 10, y: 10 }];
+let snake1 = [{ x: PLAYER1_INITIAL_POSITION.x, y: PLAYER1_INITIAL_POSITION.y }];
 /** @type {Array<{x: number, y: number}>} プレイヤー2のスネークのセグメント配列 */
-let snake2 = [{ x: 20, y: 20 }];
+let snake2 = [{ x: PLAYER2_INITIAL_POSITION.x, y: PLAYER2_INITIAL_POSITION.y }];
 /** @type {Array<{x: number, y: number}>} 食べ物の位置配列 */
 let foods = [];
 /** @type {number} プレイヤー1の水平移動方向 */
@@ -57,9 +75,9 @@ let shadowTrail2 = [];
  * ゲーム画面を表示し、ゲームを開始する
  * @param {number} players - プレイヤー数 (1 または 2)
  */
-function startGame(players) {
-  playerCount = players;
-  gameState = "playing";
+export function startGame(players) {
+  setPlayerCount(players);
+  setGameState(GAME_STATE_PLAYING);
   titleScreen.style.display = "none";
   gameScreen.style.display = "block";
 
@@ -130,20 +148,20 @@ function generateFood() {
  * 背景、影の軌跡、スネーク、食べ物を含むゲーム全体をレンダリングする
  */
 function drawGame() {
-  ctx.fillStyle = "black";
+  ctx.fillStyle = BACKGROUND_COLOR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw player 1 shadow trail with fading effect (green)
   for (let i = 0; i < shadowTrail1.length; i++) {
     const shadow = shadowTrail1[i];
     const age = i + 1;
-    const opacity = Math.max(0, 1 - age * 0.2);
-    ctx.fillStyle = `rgba(0, 150, 0, ${opacity * 0.75})`;
+    const opacity = Math.max(0, 1 - age * SHADOW_OPACITY_DECAY);
+    ctx.fillStyle = `rgba(${PLAYER1_SHADOW_COLOR_BASE}, ${opacity * 0.75})`;
     ctx.fillRect(
-      shadow.x * gridSize,
-      shadow.y * gridSize,
-      gridSize - 2,
-      gridSize - 2
+      shadow.x * GRID_SIZE,
+      shadow.y * GRID_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 
@@ -152,49 +170,49 @@ function drawGame() {
     for (let i = 0; i < shadowTrail2.length; i++) {
       const shadow = shadowTrail2[i];
       const age = i + 1;
-      const opacity = Math.max(0, 1 - age * 0.2);
-      ctx.fillStyle = `rgba(0, 100, 255, ${opacity * 0.75})`;
+      const opacity = Math.max(0, 1 - age * SHADOW_OPACITY_DECAY);
+      ctx.fillStyle = `rgba(${PLAYER2_SHADOW_COLOR_BASE}, ${opacity * 0.75})`;
       ctx.fillRect(
-        shadow.x * gridSize,
-        shadow.y * gridSize,
-        gridSize - 2,
-        gridSize - 2
+        shadow.x * GRID_SIZE,
+        shadow.y * GRID_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE
       );
     }
   }
 
   // Draw player 1 snake (green)
-  ctx.fillStyle = "lime";
+  ctx.fillStyle = PLAYER1_COLOR;
   for (let segment of snake1) {
     ctx.fillRect(
-      segment.x * gridSize,
-      segment.y * gridSize,
-      gridSize - 2,
-      gridSize - 2
+      segment.x * GRID_SIZE,
+      segment.y * GRID_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 
   // Draw player 2 snake (blue) - only in 2-player mode
   if (playerCount === 2) {
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = PLAYER2_COLOR;
     for (let segment of snake2) {
       ctx.fillRect(
-        segment.x * gridSize,
-        segment.y * gridSize,
-        gridSize - 2,
-        gridSize - 2
+        segment.x * GRID_SIZE,
+        segment.y * GRID_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE
       );
     }
   }
 
   // Draw foods
-  ctx.fillStyle = "red";
+  ctx.fillStyle = FOOD_COLOR;
   for (let food of foods) {
     ctx.fillRect(
-      food.x * gridSize,
-      food.y * gridSize,
-      gridSize - 2,
-      gridSize - 2
+      food.x * GRID_SIZE,
+      food.y * GRID_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 }
@@ -235,7 +253,7 @@ function moveSnake1() {
   let ateFood = false;
   for (let i = foods.length - 1; i >= 0; i--) {
     if (head.x === foods[i].x && head.y === foods[i].y) {
-      score += 10;
+      score += FOOD_SCORE;
       scoreElement.textContent = score.toString();
       foods.splice(i, 1); // 食べた食べ物を削除
       ateFood = true;
@@ -250,7 +268,7 @@ function moveSnake1() {
     if (tail) {
       shadowTrail1.unshift({ x: tail.x, y: tail.y });
     }
-    if (shadowTrail1.length > 5) {
+    if (shadowTrail1.length > MAX_SHADOW_TRAIL_LENGTH) {
       shadowTrail1.pop();
     }
   }
@@ -290,7 +308,7 @@ function moveSnake2() {
   let ateFood = false;
   for (let i = foods.length - 1; i >= 0; i--) {
     if (head.x === foods[i].x && head.y === foods[i].y) {
-      score += 10;
+      score += FOOD_SCORE;
       scoreElement.textContent = score.toString();
       foods.splice(i, 1); // 食べた食べ物を削除
       ateFood = true;
@@ -305,7 +323,7 @@ function moveSnake2() {
     if (tail) {
       shadowTrail2.unshift({ x: tail.x, y: tail.y });
     }
-    if (shadowTrail2.length > 5) {
+    if (shadowTrail2.length > MAX_SHADOW_TRAIL_LENGTH) {
       shadowTrail2.pop();
     }
   }
@@ -315,8 +333,8 @@ function moveSnake2() {
  * ゲームを終了し、ゲームオーバー画面を表示する
  */
 function gameOver() {
-  gameRunning = false;
-  gameState = "gameOver";
+  setGameRunning(false);
+  setGameState(GAME_STATE_GAME_OVER);
   gameOverElement.style.display = "block";
 }
 
@@ -324,16 +342,16 @@ function gameOver() {
  * ゲームを初期状態にリセットし、新しいゲームを開始する
  */
 function resetGame() {
-  snake1 = [{ x: 10, y: 10 }];
-  snake2 = [{ x: 20, y: 20 }];
+  snake1 = [{ x: PLAYER1_INITIAL_POSITION.x, y: PLAYER1_INITIAL_POSITION.y }];
+  snake2 = [{ x: PLAYER2_INITIAL_POSITION.x, y: PLAYER2_INITIAL_POSITION.y }];
   dx1 = 0;
   dy1 = 0;
   dx2 = 0;
   dy2 = 0;
   score = 0;
   scoreElement.textContent = score.toString();
-  gameRunning = true;
-  gameState = "playing";
+  setGameRunning(true);
+  setGameState(GAME_STATE_PLAYING);
   gameOverElement.style.display = "none";
   shadowTrail1 = [];
   shadowTrail2 = [];
@@ -344,8 +362,8 @@ function resetGame() {
 /**
  * スネークの位置を更新し、ゲームを再描画するメインゲームループ
  */
-function gameLoop() {
-  if (gameState === "playing") {
+export function gameLoop() {
+  if (gameState === GAME_STATE_PLAYING) {
     moveSnake1();
     if (playerCount === 2) {
       moveSnake2();
@@ -359,13 +377,13 @@ function gameLoop() {
  * @param {KeyboardEvent} e - キーボードイベント
  */
 document.addEventListener("keydown", (e) => {
-  if (gameState === "gameOver" && e.code === "Space") {
+  if (gameState === GAME_STATE_GAME_OVER && e.code === "Space") {
     e.preventDefault();
     resetGame();
     return;
   }
 
-  if (gameState !== "playing") return;
+  if (gameState !== GAME_STATE_PLAYING) return;
 
   switch (e.code) {
     // Player 1 controls (Arrow keys)
@@ -440,8 +458,8 @@ document.addEventListener("keydown", (e) => {
 
 // バックボタンイベントリスナーを追加
 backToTitleBtn.addEventListener("click", () => {
-  gameState = "title";
+  setGameState(GAME_STATE_TITLE);
   titleScreen.style.display = "block";
   gameScreen.style.display = "none";
-  gameRunning = false;
+  setGameRunning(false);
 });
