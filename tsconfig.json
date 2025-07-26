@@ -9,11 +9,6 @@
     "moduleResolution": "node",
     "lib": ["dom", "es2015"]
   },
-  "include": [
-    "scripts/**/*.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "__tests__"
-  ]
+  "include": ["scripts/**/*.js"],
+  "exclude": ["node_modules", "__tests__"]
 }
