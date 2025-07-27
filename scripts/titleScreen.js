@@ -1,13 +1,25 @@
 import { GAME_STATE_TITLE } from './constants.js';
-import { startGame, titleScreen, gameScreen, onePlayerBtn, twoPlayerBtn } from './gameScreen.js';
+import { startGame } from './gameScreen.js';
 import { setGameState, setGameRunning } from './main.js';
 
-// DOM elements are declared in gameScreen.js
+// DOM elements for title screen
+export const titleScreen = /** @type {HTMLElement} */ (
+  document.getElementById("titleScreen")
+);
+export const onePlayerBtn = /** @type {HTMLElement} */ (
+  document.getElementById("onePlayerBtn")
+);
+export const twoPlayerBtn = /** @type {HTMLElement} */ (
+  document.getElementById("twoPlayerBtn")
+);
+const gameScreen = /** @type {HTMLElement} */ (
+  document.getElementById("gameScreen")
+);
 
 /**
  * タイトル画面を表示する
  */
-function showTitleScreen() {
+export function showTitleScreen() {
   setGameState(GAME_STATE_TITLE);
   titleScreen.style.display = 'block';
   gameScreen.style.display = 'none';

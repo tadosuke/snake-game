@@ -5,7 +5,6 @@ import {
   SHADOW_OPACITY_DECAY,
   GAME_STATE_PLAYING,
   GAME_STATE_GAME_OVER,
-  GAME_STATE_TITLE,
   PLAYER1_INITIAL_POSITION,
   PLAYER2_INITIAL_POSITION,
   PLAYER1_COLOR,
@@ -17,6 +16,7 @@ import {
   GRID_BORDER_SIZE
 } from './constants.js';
 import { setPlayerCount, setGameState, setGameRunning, playerCount, gameRunning, gameState } from './main.js';
+import { showTitleScreen, titleScreen } from './titleScreen.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (
   document.getElementById("gameCanvas")
@@ -36,15 +36,6 @@ const backToTitleBtn = /** @type {HTMLElement} */ (
 );
 const gameInstructions = /** @type {HTMLElement} */ (
   document.getElementById("gameInstructions")
-);
-export const titleScreen = /** @type {HTMLElement} */ (
-  document.getElementById("titleScreen")
-);
-export const onePlayerBtn = /** @type {HTMLElement} */ (
-  document.getElementById("onePlayerBtn")
-);
-export const twoPlayerBtn = /** @type {HTMLElement} */ (
-  document.getElementById("twoPlayerBtn")
 );
 
 /** @type {number} 行/列あたりのタイル数 */
@@ -458,8 +449,5 @@ document.addEventListener("keydown", (e) => {
 
 // バックボタンイベントリスナーを追加
 backToTitleBtn.addEventListener("click", () => {
-  setGameState(GAME_STATE_TITLE);
-  titleScreen.style.display = "block";
-  gameScreen.style.display = "none";
-  setGameRunning(false);
+  showTitleScreen();
 });
