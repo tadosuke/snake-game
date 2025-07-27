@@ -3,7 +3,7 @@ import {
   FOOD_SCORE,
   PLAYER1_INITIAL_POSITION,
   PLAYER2_INITIAL_POSITION,
-} from "./constants.js";
+} from './constants.js';
 import {
   isWithinBounds,
   checkSelfCollision,
@@ -12,7 +12,7 @@ import {
   moveSnake,
   isPositionOccupiedBySnakes,
   generateRandomPosition,
-} from "./snake.js";
+} from './snake.js';
 
 /** @type {number} 行/列あたりのタイル数 */
 const TILE_COUNT = 600 / GRID_SIZE; // canvas.width / GRID_SIZE
