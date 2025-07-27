@@ -21,7 +21,7 @@
       "Bash(git stash *)",
       "Bash(mv *)",
       "Bash(mkdir *)",
-      "npm run *"
+      "Bash(npm run *)"
     ]
   }
 }
