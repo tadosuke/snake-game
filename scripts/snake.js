@@ -1,6 +1,7 @@
 import {
   GRID_SIZE,
   MAX_SHADOW_TRAIL_LENGTH,
+  SHADOW_OPACITY_DECAY,
 } from './constants.js';
 
 /** @type {number} 行/列あたりのタイル数 */

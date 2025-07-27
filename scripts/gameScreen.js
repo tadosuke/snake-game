@@ -10,7 +10,7 @@ import {
   PLAYER2_SHADOW_COLOR_BASE,
   GRID_BORDER_SIZE,
   SHADOW_OPACITY_DECAY,
-} from "./constants.js";
+} from './constants.js';
 import {
   setPlayerCount,
   setGameState,
@@ -18,8 +18,8 @@ import {
   playerCount,
   gameRunning,
   gameState,
-} from "./main.js";
-import { showTitleScreen, titleScreen } from "./titleScreen.js";
+} from './main.js';
+import { showTitleScreen, titleScreen } from './titleScreen.js';
 import {
   getGameState,
   resetGameState,
@@ -28,26 +28,26 @@ import {
   generateFood,
   moveSnake1,
   moveSnake2,
-} from "./gameState.js";
+} from './gameState.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (
-  document.getElementById("gameCanvas")
+  document.getElementById('gameCanvas')
 );
-const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
+const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
 const scoreElement = /** @type {HTMLElement} */ (
-  document.getElementById("score")
+  document.getElementById('score')
 );
 const gameOverElement = /** @type {HTMLElement} */ (
-  document.getElementById("gameOver")
+  document.getElementById('gameOver')
 );
 export const gameScreen = /** @type {HTMLElement} */ (
-  document.getElementById("gameScreen")
+  document.getElementById('gameScreen')
 );
 const backToTitleBtn = /** @type {HTMLElement} */ (
-  document.getElementById("backToTitleBtn")
+  document.getElementById('backToTitleBtn')
 );
 const gameInstructions = /** @type {HTMLElement} */ (
-  document.getElementById("gameInstructions")
+  document.getElementById('gameInstructions')
 );
 
 /**
@@ -57,15 +57,15 @@ const gameInstructions = /** @type {HTMLElement} */ (
 export function startGame(players) {
   setPlayerCount(players);
   setGameState(GAME_STATE_PLAYING);
-  titleScreen.style.display = "none";
-  gameScreen.style.display = "block";
+  titleScreen.style.display = 'none';
+  gameScreen.style.display = 'block';
 
   // プレイヤー数に応じて操作説明を更新
   if (playerCount === 1) {
-    gameInstructions.textContent = "矢印キーで操作 | Spaceキーでリスタート";
+    gameInstructions.textContent = '矢印キーで操作 | Spaceキーでリスタート';
   } else {
     gameInstructions.textContent =
-      "プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート";
+      'プレイヤー1: 矢印キー (緑) | プレイヤー2: WASD (青) | Spaceキーでリスタート';
   }
 
   resetGame();
@@ -152,7 +152,7 @@ function drawGame() {
 function gameOver() {
   setGameRunning(false);
   setGameState(GAME_STATE_GAME_OVER);
-  gameOverElement.style.display = "block";
+  gameOverElement.style.display = 'block';
 }
 
 /**
@@ -164,7 +164,7 @@ function resetGame() {
   scoreElement.textContent = currentGameState.score.toString();
   setGameRunning(true);
   setGameState(GAME_STATE_PLAYING);
-  gameOverElement.style.display = "none";
+  gameOverElement.style.display = 'none';
   generateFood(playerCount);
 }
 
@@ -203,8 +203,8 @@ export function gameLoop() {
  * スネークの操作とゲームリスタートのためのキーボード入力を処理する
  * @param {KeyboardEvent} e - キーボードイベント
  */
-document.addEventListener("keydown", (e) => {
-  if (gameState === GAME_STATE_GAME_OVER && e.code === "Space") {
+document.addEventListener('keydown', (e) => {
+  if (gameState === GAME_STATE_GAME_OVER && e.code === 'Space') {
     e.preventDefault();
     resetGame();
     return;
@@ -213,77 +213,77 @@ document.addEventListener("keydown", (e) => {
   if (gameState !== GAME_STATE_PLAYING) return;
 
   switch (e.code) {
-    // Player 1 controls (Arrow keys)
-    case "ArrowUp":
-      e.preventDefault();
-      const currentState1 = getGameState();
-      if (currentState1.dy1 !== 1) {
-        setPlayer1Direction(0, -1);
-      }
-      break;
-    case "ArrowDown":
-      e.preventDefault();
-      const currentState2 = getGameState();
-      if (currentState2.dy1 !== -1) {
-        setPlayer1Direction(0, 1);
-      }
-      break;
-    case "ArrowLeft":
-      e.preventDefault();
-      const currentState3 = getGameState();
-      if (currentState3.dx1 !== 1) {
-        setPlayer1Direction(-1, 0);
-      }
-      break;
-    case "ArrowRight":
-      e.preventDefault();
-      const currentState4 = getGameState();
-      if (currentState4.dx1 !== -1) {
-        setPlayer1Direction(1, 0);
-      }
-      break;
+  // Player 1 controls (Arrow keys)
+  case 'ArrowUp':
+    e.preventDefault();
+    const currentState1 = getGameState();
+    if (currentState1.dy1 !== 1) {
+      setPlayer1Direction(0, -1);
+    }
+    break;
+  case 'ArrowDown':
+    e.preventDefault();
+    const currentState2 = getGameState();
+    if (currentState2.dy1 !== -1) {
+      setPlayer1Direction(0, 1);
+    }
+    break;
+  case 'ArrowLeft':
+    e.preventDefault();
+    const currentState3 = getGameState();
+    if (currentState3.dx1 !== 1) {
+      setPlayer1Direction(-1, 0);
+    }
+    break;
+  case 'ArrowRight':
+    e.preventDefault();
+    const currentState4 = getGameState();
+    if (currentState4.dx1 !== -1) {
+      setPlayer1Direction(1, 0);
+    }
+    break;
 
     // Player 2 controls (WASD keys) - only in 2-player mode
-    case "KeyW":
-      if (playerCount === 2) {
-        e.preventDefault();
-        const currentState5 = getGameState();
-        if (currentState5.dy2 !== 1) {
-          setPlayer2Direction(0, -1);
-        }
+  case 'KeyW':
+    if (playerCount === 2) {
+      e.preventDefault();
+      const currentState5 = getGameState();
+      if (currentState5.dy2 !== 1) {
+        setPlayer2Direction(0, -1);
       }
-      break;
-    case "KeyS":
-      if (playerCount === 2) {
-        e.preventDefault();
-        const currentState6 = getGameState();
-        if (currentState6.dy2 !== -1) {
-          setPlayer2Direction(0, 1);
-        }
+    }
+    break;
+  case 'KeyS':
+    if (playerCount === 2) {
+      e.preventDefault();
+      const currentState6 = getGameState();
+      if (currentState6.dy2 !== -1) {
+        setPlayer2Direction(0, 1);
       }
-      break;
-    case "KeyA":
-      if (playerCount === 2) {
-        e.preventDefault();
-        const currentState7 = getGameState();
-        if (currentState7.dx2 !== 1) {
-          setPlayer2Direction(-1, 0);
-        }
+    }
+    break;
+  case 'KeyA':
+    if (playerCount === 2) {
+      e.preventDefault();
+      const currentState7 = getGameState();
+      if (currentState7.dx2 !== 1) {
+        setPlayer2Direction(-1, 0);
       }
-      break;
-    case "KeyD":
-      if (playerCount === 2) {
-        e.preventDefault();
-        const currentState8 = getGameState();
-        if (currentState8.dx2 !== -1) {
-          setPlayer2Direction(1, 0);
-        }
+    }
+    break;
+  case 'KeyD':
+    if (playerCount === 2) {
+      e.preventDefault();
+      const currentState8 = getGameState();
+      if (currentState8.dx2 !== -1) {
+        setPlayer2Direction(1, 0);
       }
-      break;
+    }
+    break;
   }
 });
 
 // バックボタンイベントリスナーを追加
-backToTitleBtn.addEventListener("click", () => {
+backToTitleBtn.addEventListener('click', () => {
   showTitleScreen();
 });

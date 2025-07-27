@@ -2,7 +2,7 @@ import {
   FOOD_SCORE,
   PLAYER1_INITIAL_POSITION,
   PLAYER2_INITIAL_POSITION,
-} from "./constants.js";
+} from './constants.js';
 import {
   isWithinBounds,
   checkSelfCollision,
@@ -11,7 +11,7 @@ import {
   moveSnake,
   isPositionOccupiedBySnakes,
   generateRandomPosition,
-} from "./snake.js";
+} from './snake.js';
 
 /**
  * @typedef {Object} GameState
