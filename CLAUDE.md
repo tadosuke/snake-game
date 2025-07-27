@@ -22,7 +22,15 @@ The project is currently minimal with only:
 
 ## Commands
 
-No build, test, or development commands are currently available. These will need to be established based on the chosen technology stack for implementing the snake game.
+- `npm test` - Run tests using Vitest
+- `npm run tscheck` - Type check with TypeScript
+
+## Package Management
+
+**IMPORTANT**: Always use exact versions for dependencies (no ^ or ~ prefixes) to ensure reproducible builds. When adding new dependencies:
+1. Install the package: `npm install <package>`
+2. Edit package.json to remove version prefixes (^ or ~)
+3. Commit both package.json and package-lock.json changes together
 
 ## Architecture Notes
 
