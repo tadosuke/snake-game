@@ -38,6 +38,11 @@
 
 - `npm run test` - Vitestを使用してテストを実行
 - `npm run tscheck` - TypeScriptで型チェック
+- `npm run lint` - ESLintを使用してコードをチェックし、自動修正
+
+**重要**: 実装完了後は必ず以下のコマンドを実行してコードの品質を確認してください：
+1. `npm run test` - テストが通ることを確認
+2. `npm run lint` - コードスタイルとエラーをチェック
 
 ## パッケージ管理
 
