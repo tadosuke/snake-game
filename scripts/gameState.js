@@ -4,8 +4,8 @@ import {
   MAX_SHADOW_TRAIL_LENGTH,
   SHADOW_OPACITY_DECAY,
   PLAYER1_INITIAL_POSITION,
-  PLAYER2_INITIAL_POSITION
-} from './constants.js';
+  PLAYER2_INITIAL_POSITION,
+} from "./constants.js";
 
 /** @type {number} 行/列あたりのタイル数 */
 const TILE_COUNT = 600 / GRID_SIZE; // canvas.width / GRID_SIZE
@@ -35,7 +35,7 @@ let gameState = {
   dy2: 0,
   score: 0,
   shadowTrail1: [],
-  shadowTrail2: []
+  shadowTrail2: [],
 };
 
 /**
@@ -60,7 +60,7 @@ export function resetGameState() {
     dy2: 0,
     score: 0,
     shadowTrail1: [],
-    shadowTrail2: []
+    shadowTrail2: [],
   };
 }
 
@@ -147,10 +147,18 @@ export function moveSnake1(playerCount, gameRunning) {
     return { collision: false, ateFood: false, newScore: gameState.score };
   }
 
-  const head = { x: gameState.snake1[0].x + gameState.dx1, y: gameState.snake1[0].y + gameState.dy1 };
+  const head = {
+    x: gameState.snake1[0].x + gameState.dx1,
+    y: gameState.snake1[0].y + gameState.dy1,
+  };
 
   // 境界チェック
-  if (head.x < 0 || head.x >= TILE_COUNT || head.y < 0 || head.y >= TILE_COUNT) {
+  if (
+    head.x < 0 ||
+    head.x >= TILE_COUNT ||
+    head.y < 0 ||
+    head.y >= TILE_COUNT
+  ) {
     return { collision: true, ateFood: false, newScore: gameState.score };
   }
 
@@ -206,10 +214,18 @@ export function moveSnake2(gameRunning) {
     return { collision: false, ateFood: false, newScore: gameState.score };
   }
 
-  const head = { x: gameState.snake2[0].x + gameState.dx2, y: gameState.snake2[0].y + gameState.dy2 };
+  const head = {
+    x: gameState.snake2[0].x + gameState.dx2,
+    y: gameState.snake2[0].y + gameState.dy2,
+  };
 
   // 境界チェック
-  if (head.x < 0 || head.x >= TILE_COUNT || head.y < 0 || head.y >= TILE_COUNT) {
+  if (
+    head.x < 0 ||
+    head.x >= TILE_COUNT ||
+    head.y < 0 ||
+    head.y >= TILE_COUNT
+  ) {
     return { collision: true, ateFood: false, newScore: gameState.score };
   }
 

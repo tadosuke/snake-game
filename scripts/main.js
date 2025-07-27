@@ -1,5 +1,5 @@
-import { GAME_LOOP_INTERVAL, GAME_STATE_TITLE } from './constants.js';
-import { gameLoop } from './gameScreen.js';
+import { GAME_LOOP_INTERVAL, GAME_STATE_TITLE } from "./constants.js";
+import { gameLoop } from "./gameScreen.js";
 
 /** @type {boolean} ゲームが現在実行中かどうか */
 export let gameRunning = false;
@@ -33,6 +33,6 @@ export function setPlayerCount(count) {
 }
 
 // DOM読み込み完了後にゲームループを開始
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   setInterval(gameLoop, GAME_LOOP_INTERVAL);
 });

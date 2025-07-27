@@ -9,10 +9,17 @@ import {
   PLAYER1_SHADOW_COLOR_BASE,
   PLAYER2_SHADOW_COLOR_BASE,
   GRID_BORDER_SIZE,
-  SHADOW_OPACITY_DECAY
-} from './constants.js';
-import { setPlayerCount, setGameState, setGameRunning, playerCount, gameRunning, gameState } from './main.js';
-import { showTitleScreen, titleScreen } from './titleScreen.js';
+  SHADOW_OPACITY_DECAY,
+} from "./constants.js";
+import {
+  setPlayerCount,
+  setGameState,
+  setGameRunning,
+  playerCount,
+  gameRunning,
+  gameState,
+} from "./main.js";
+import { showTitleScreen, titleScreen } from "./titleScreen.js";
 import {
   getGameState,
   resetGameState,
@@ -20,8 +27,8 @@ import {
   setPlayer2Direction,
   generateFood,
   moveSnake1,
-  moveSnake2
-} from './gameState.js';
+  moveSnake2,
+} from "./gameState.js";
 
 const canvas = /** @type {HTMLCanvasElement} */ (
   document.getElementById("gameCanvas")
@@ -67,13 +74,12 @@ export function startGame(players) {
   resetGame();
 }
 
-
 /**
  * 背景、影の軌跡、スネーク、食べ物を含むゲーム全体をレンダリングする
  */
 function drawGame() {
   const currentGameState = getGameState();
-  
+
   ctx.fillStyle = BACKGROUND_COLOR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -87,7 +93,7 @@ function drawGame() {
       shadow.x * GRID_SIZE,
       shadow.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE
+      GRID_SIZE - GRID_BORDER_SIZE,
     );
   }
 
@@ -102,7 +108,7 @@ function drawGame() {
         shadow.x * GRID_SIZE,
         shadow.y * GRID_SIZE,
         GRID_SIZE - GRID_BORDER_SIZE,
-        GRID_SIZE - GRID_BORDER_SIZE
+        GRID_SIZE - GRID_BORDER_SIZE,
       );
     }
   }
@@ -114,7 +120,7 @@ function drawGame() {
       segment.x * GRID_SIZE,
       segment.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE
+      GRID_SIZE - GRID_BORDER_SIZE,
     );
   }
 
@@ -126,7 +132,7 @@ function drawGame() {
         segment.x * GRID_SIZE,
         segment.y * GRID_SIZE,
         GRID_SIZE - GRID_BORDER_SIZE,
-        GRID_SIZE - GRID_BORDER_SIZE
+        GRID_SIZE - GRID_BORDER_SIZE,
       );
     }
   }
@@ -138,11 +144,10 @@ function drawGame() {
       food.x * GRID_SIZE,
       food.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE
+      GRID_SIZE - GRID_BORDER_SIZE,
     );
   }
 }
-
 
 /**
  * ゲームを終了し、ゲームオーバー画面を表示する
@@ -180,7 +185,7 @@ export function gameLoop() {
       scoreElement.textContent = result1.newScore.toString();
       generateFood(playerCount);
     }
-    
+
     if (playerCount === 2) {
       const result2 = moveSnake2(gameRunning);
       if (result2.collision) {
@@ -192,7 +197,7 @@ export function gameLoop() {
         generateFood(playerCount);
       }
     }
-    
+
     drawGame();
   }
 }

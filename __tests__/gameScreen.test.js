@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { JSDOM } from 'jsdom';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { JSDOM } from "jsdom";
 
-describe('gameScreen.js', () => {
+describe("gameScreen.js", () => {
   let dom;
   let document;
   let window;
@@ -26,24 +26,24 @@ describe('gameScreen.js', () => {
         </body>
       </html>
     `);
-    
+
     document = dom.window.document;
     window = dom.window;
     global.document = document;
     global.window = window;
 
     // canvas contextをモック
-    canvas = document.getElementById('gameCanvas');
+    canvas = document.getElementById("gameCanvas");
     ctx = {
-      fillStyle: '',
+      fillStyle: "",
       fillRect: vi.fn(),
-      clearRect: vi.fn()
+      clearRect: vi.fn(),
     };
     canvas.getContext = vi.fn(() => ctx);
 
     // グローバル変数を初期化
     window.gameRunning = false;
-    window.gameState = 'title';
+    window.gameState = "title";
     window.playerCount = 1;
     window.snake1 = [{ x: 10, y: 10 }];
     window.snake2 = [{ x: 20, y: 20 }];
@@ -59,40 +59,40 @@ describe('gameScreen.js', () => {
     window.tileCount = 20;
   });
 
-  describe('startGame関数の動作', () => {
-    it('1プレイヤーモードでゲームを開始する', () => {
+  describe("startGame関数の動作", () => {
+    it("1プレイヤーモードでゲームを開始する", () => {
       const startGame = (players) => {
         window.playerCount = players;
-        window.gameState = 'playing';
-        document.getElementById('titleScreen').style.display = 'none';
-        document.getElementById('gameScreen').style.display = 'block';
+        window.gameState = "playing";
+        document.getElementById("titleScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
       };
 
       startGame(1);
 
       expect(window.playerCount).toBe(1);
-      expect(window.gameState).toBe('playing');
-      expect(document.getElementById('titleScreen').style.display).toBe('none');
-      expect(document.getElementById('gameScreen').style.display).toBe('block');
+      expect(window.gameState).toBe("playing");
+      expect(document.getElementById("titleScreen").style.display).toBe("none");
+      expect(document.getElementById("gameScreen").style.display).toBe("block");
     });
 
-    it('2プレイヤーモードでゲームを開始する', () => {
+    it("2プレイヤーモードでゲームを開始する", () => {
       const startGame = (players) => {
         window.playerCount = players;
-        window.gameState = 'playing';
-        document.getElementById('titleScreen').style.display = 'none';
-        document.getElementById('gameScreen').style.display = 'block';
+        window.gameState = "playing";
+        document.getElementById("titleScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
       };
 
       startGame(2);
 
       expect(window.playerCount).toBe(2);
-      expect(window.gameState).toBe('playing');
+      expect(window.gameState).toBe("playing");
     });
   });
 
-  describe('generateFood関数の動作', () => {
-    it('1プレイヤーモードでは1つの食べ物を生成する', () => {
+  describe("generateFood関数の動作", () => {
+    it("1プレイヤーモードでは1つの食べ物を生成する", () => {
       const generateFood = () => {
         const maxFoods = window.playerCount === 1 ? 1 : 2;
         while (window.foods.length < maxFoods) {
@@ -109,11 +109,11 @@ describe('gameScreen.js', () => {
       generateFood();
 
       expect(window.foods).toHaveLength(1);
-      expect(window.foods[0]).toHaveProperty('x');
-      expect(window.foods[0]).toHaveProperty('y');
+      expect(window.foods[0]).toHaveProperty("x");
+      expect(window.foods[0]).toHaveProperty("y");
     });
 
-    it('2プレイヤーモードでは2つの食べ物を生成する', () => {
+    it("2プレイヤーモードでは2つの食べ物を生成する", () => {
       const generateFood = () => {
         const maxFoods = window.playerCount === 1 ? 1 : 2;
         while (window.foods.length < maxFoods) {
@@ -133,24 +133,24 @@ describe('gameScreen.js', () => {
     });
   });
 
-  describe('gameOver関数の動作', () => {
-    it('ゲームを終了状態にする', () => {
+  describe("gameOver関数の動作", () => {
+    it("ゲームを終了状態にする", () => {
       const gameOver = () => {
         window.gameRunning = false;
-        window.gameState = 'gameOver';
-        document.getElementById('gameOver').style.display = 'block';
+        window.gameState = "gameOver";
+        document.getElementById("gameOver").style.display = "block";
       };
 
       gameOver();
 
       expect(window.gameRunning).toBe(false);
-      expect(window.gameState).toBe('gameOver');
-      expect(document.getElementById('gameOver').style.display).toBe('block');
+      expect(window.gameState).toBe("gameOver");
+      expect(document.getElementById("gameOver").style.display).toBe("block");
     });
   });
 
-  describe('resetGame関数の動作', () => {
-    it('ゲームを初期状態にリセットする', () => {
+  describe("resetGame関数の動作", () => {
+    it("ゲームを初期状態にリセットする", () => {
       const resetGame = () => {
         window.snake1 = [{ x: 10, y: 10 }];
         window.snake2 = [{ x: 20, y: 20 }];
@@ -159,10 +159,10 @@ describe('gameScreen.js', () => {
         window.dx2 = 0;
         window.dy2 = 0;
         window.score = 0;
-        document.getElementById('score').textContent = window.score.toString();
+        document.getElementById("score").textContent = window.score.toString();
         window.gameRunning = true;
-        window.gameState = 'playing';
-        document.getElementById('gameOver').style.display = 'none';
+        window.gameState = "playing";
+        document.getElementById("gameOver").style.display = "none";
         window.shadowTrail1 = [];
         window.shadowTrail2 = [];
         window.foods = [];
@@ -174,22 +174,22 @@ describe('gameScreen.js', () => {
       expect(window.snake2).toEqual([{ x: 20, y: 20 }]);
       expect(window.score).toBe(0);
       expect(window.gameRunning).toBe(true);
-      expect(window.gameState).toBe('playing');
+      expect(window.gameState).toBe("playing");
       expect(window.shadowTrail1).toEqual([]);
       expect(window.shadowTrail2).toEqual([]);
       expect(window.foods).toEqual([]);
     });
   });
 
-  describe('キーボード操作ロジック', () => {
-    it('矢印キー上でプレイヤー1が上に移動する', () => {
-      window.gameState = 'playing';
+  describe("キーボード操作ロジック", () => {
+    it("矢印キー上でプレイヤー1が上に移動する", () => {
+      window.gameState = "playing";
       window.dx1 = 0;
       window.dy1 = 0;
 
       // キーハンドラーをシミュレート
       const handleKeyUp = () => {
-        if (window.gameState === 'playing') {
+        if (window.gameState === "playing") {
           if (window.dy1 !== 1) {
             window.dx1 = 0;
             window.dy1 = -1;
@@ -203,13 +203,13 @@ describe('gameScreen.js', () => {
       expect(window.dy1).toBe(-1);
     });
 
-    it('矢印キー下でプレイヤー1が下に移動する', () => {
-      window.gameState = 'playing';
+    it("矢印キー下でプレイヤー1が下に移動する", () => {
+      window.gameState = "playing";
       window.dx1 = 0;
       window.dy1 = 0;
 
       const handleKeyDown = () => {
-        if (window.gameState === 'playing') {
+        if (window.gameState === "playing") {
           if (window.dy1 !== -1) {
             window.dx1 = 0;
             window.dy1 = 1;
@@ -223,14 +223,14 @@ describe('gameScreen.js', () => {
       expect(window.dy1).toBe(1);
     });
 
-    it('WASDキーでプレイヤー2が移動する（2プレイヤーモード）', () => {
-      window.gameState = 'playing';
+    it("WASDキーでプレイヤー2が移動する（2プレイヤーモード）", () => {
+      window.gameState = "playing";
       window.playerCount = 2;
       window.dx2 = 0;
       window.dy2 = 0;
 
       const handleKeyW = () => {
-        if (window.gameState === 'playing' && window.playerCount === 2) {
+        if (window.gameState === "playing" && window.playerCount === 2) {
           if (window.dy2 !== 1) {
             window.dx2 = 0;
             window.dy2 = -1;
@@ -245,12 +245,17 @@ describe('gameScreen.js', () => {
     });
   });
 
-  describe('衝突検知ロジック', () => {
-    it('壁との衝突を検知する', () => {
+  describe("衝突検知ロジック", () => {
+    it("壁との衝突を検知する", () => {
       window.tileCount = 20;
-      
+
       const checkWallCollision = (head) => {
-        return head.x < 0 || head.x >= window.tileCount || head.y < 0 || head.y >= window.tileCount;
+        return (
+          head.x < 0 ||
+          head.x >= window.tileCount ||
+          head.y < 0 ||
+          head.y >= window.tileCount
+        );
       };
 
       expect(checkWallCollision({ x: -1, y: 10 })).toBe(true);
@@ -260,9 +265,12 @@ describe('gameScreen.js', () => {
       expect(checkWallCollision({ x: 10, y: 10 })).toBe(false);
     });
 
-    it('食べ物との衝突を検知する', () => {
+    it("食べ物との衝突を検知する", () => {
       const head = { x: 5, y: 5 };
-      window.foods = [{ x: 5, y: 5 }, { x: 10, y: 10 }];
+      window.foods = [
+        { x: 5, y: 5 },
+        { x: 10, y: 10 },
+      ];
 
       const checkFoodCollision = (head, foods) => {
         for (let i = 0; i < foods.length; i++) {
@@ -278,13 +286,13 @@ describe('gameScreen.js', () => {
     });
   });
 
-  describe('Canvas描画', () => {
-    it('canvasコンテキストが取得できる', () => {
+  describe("Canvas描画", () => {
+    it("canvasコンテキストが取得できる", () => {
       expect(canvas.getContext).toBeDefined();
-      expect(canvas.getContext('2d')).toBe(ctx);
+      expect(canvas.getContext("2d")).toBe(ctx);
     });
 
-    it('描画メソッドが呼ばれる', () => {
+    it("描画メソッドが呼ばれる", () => {
       ctx.fillRect(0, 0, 20, 20);
       expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, 20, 20);
     });
