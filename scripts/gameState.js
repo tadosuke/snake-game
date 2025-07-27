@@ -1,5 +1,4 @@
 import {
-  GRID_SIZE,
   FOOD_SCORE,
   PLAYER1_INITIAL_POSITION,
   PLAYER2_INITIAL_POSITION,
@@ -13,9 +12,6 @@ import {
   isPositionOccupiedBySnakes,
   generateRandomPosition,
 } from "./snake.js";
-
-/** @type {number} 行/列あたりのタイル数 */
-const TILE_COUNT = 600 / GRID_SIZE; // canvas.width / GRID_SIZE
 
 /**
  * @typedef {Object} GameState
@@ -107,7 +103,9 @@ export function generateFood(playerCount) {
       validPosition = true;
 
       // スネークとの衝突チェック
-      if (isPositionOccupiedBySnakes(newFood, gameState.snake1, gameState.snake2)) {
+      if (
+        isPositionOccupiedBySnakes(newFood, gameState.snake1, gameState.snake2)
+      ) {
         validPosition = false;
       }
 
@@ -169,7 +167,13 @@ export function moveSnake1(playerCount, gameRunning) {
   }
 
   // スネークを移動
-  moveSnake(gameState.snake1, gameState.dx1, gameState.dy1, ateFood, gameState.shadowTrail1);
+  moveSnake(
+    gameState.snake1,
+    gameState.dx1,
+    gameState.dy1,
+    ateFood,
+    gameState.shadowTrail1
+  );
 
   return { collision: false, ateFood, newScore: gameState.score };
 }
@@ -214,7 +218,13 @@ export function moveSnake2(gameRunning) {
   }
 
   // スネークを移動
-  moveSnake(gameState.snake2, gameState.dx2, gameState.dy2, ateFood, gameState.shadowTrail2);
+  moveSnake(
+    gameState.snake2,
+    gameState.dx2,
+    gameState.dy2,
+    ateFood,
+    gameState.shadowTrail2
+  );
 
   return { collision: false, ateFood, newScore: gameState.score };
 }

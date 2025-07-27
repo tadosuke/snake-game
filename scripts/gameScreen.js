@@ -50,9 +50,6 @@ const gameInstructions = /** @type {HTMLElement} */ (
   document.getElementById("gameInstructions")
 );
 
-/** @type {number} 行/列あたりのタイル数 */
-const tileCount = canvas.width / GRID_SIZE;
-
 /**
  * ゲーム画面を表示し、ゲームを開始する
  * @param {number} players - プレイヤー数 (1 または 2)
@@ -93,7 +90,7 @@ function drawGame() {
       shadow.x * GRID_SIZE,
       shadow.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 
@@ -108,7 +105,7 @@ function drawGame() {
         shadow.x * GRID_SIZE,
         shadow.y * GRID_SIZE,
         GRID_SIZE - GRID_BORDER_SIZE,
-        GRID_SIZE - GRID_BORDER_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE
       );
     }
   }
@@ -120,7 +117,7 @@ function drawGame() {
       segment.x * GRID_SIZE,
       segment.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 
@@ -132,7 +129,7 @@ function drawGame() {
         segment.x * GRID_SIZE,
         segment.y * GRID_SIZE,
         GRID_SIZE - GRID_BORDER_SIZE,
-        GRID_SIZE - GRID_BORDER_SIZE,
+        GRID_SIZE - GRID_BORDER_SIZE
       );
     }
   }
@@ -144,7 +141,7 @@ function drawGame() {
       food.x * GRID_SIZE,
       food.y * GRID_SIZE,
       GRID_SIZE - GRID_BORDER_SIZE,
-      GRID_SIZE - GRID_BORDER_SIZE,
+      GRID_SIZE - GRID_BORDER_SIZE
     );
   }
 }

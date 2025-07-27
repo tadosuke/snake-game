@@ -1,9 +1,7 @@
 import {
   GRID_SIZE,
-  FOOD_SCORE,
   MAX_SHADOW_TRAIL_LENGTH,
-  SHADOW_OPACITY_DECAY,
-} from "./constants.js";
+} from './constants.js';
 
 /** @type {number} 行/列あたりのタイル数 */
 const TILE_COUNT = 600 / GRID_SIZE; // canvas.width / GRID_SIZE
