@@ -9,6 +9,7 @@
 ## 開発セットアップ
 
 このプロジェクトは以下の技術スタックを使用しています：
+
 - HTML/CSS/JavaScript（バニラJS）
 - Vitest（テスト）
 - TypeScript（型チェック）
@@ -35,12 +36,13 @@
 
 ## コマンド
 
-- `npm test` - Vitestを使用してテストを実行
+- `npm run test` - Vitestを使用してテストを実行
 - `npm run tscheck` - TypeScriptで型チェック
 
 ## パッケージ管理
 
 **重要**: 再現可能なビルドを確保するため、依存関係には常に正確なバージョンを使用してください（^や~プレフィックスは使用しない）。新しい依存関係を追加する際は：
+
 1. パッケージをインストール: `npm install <package>`
 2. package.jsonを編集してバージョンプレフィックス（^や~）を削除
 3. package.jsonとpackage-lock.jsonの変更を一緒にコミット
