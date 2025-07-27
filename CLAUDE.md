@@ -1,43 +1,43 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、このリポジトリでコードを扱う際のClaude Code (claude.ai/code) への指針を提供します。
 
-## Project Overview
+## プロジェクト概要
 
-This is a snake-game project that appears to be in its initial setup phase. The repository currently contains only a README.md file and is a fresh Git repository on the main branch.
+これは初期セットアップ段階にあるスネークゲームプロジェクトです。現在リポジトリにはREADME.mdファイルのみが含まれており、メインブランチの新しいGitリポジトリです。
 
-## Development Setup
+## 開発セットアップ
 
-This project does not yet have any build tools, package managers, or development dependencies configured. When implementing the snake game, you'll need to:
+このプロジェクトには、まだビルドツール、パッケージマネージャー、または開発依存関係が設定されていません。スネークゲームを実装する際は、以下が必要になります：
 
-1. Determine the appropriate technology stack (HTML/CSS/JavaScript, Python, or other)
-2. Set up the necessary build tools and dependencies
-3. Implement the core game logic and rendering
+1. 適切な技術スタックの決定（HTML/CSS/JavaScript、Python、またはその他）
+2. 必要なビルドツールと依存関係のセットアップ
+3. コアゲームロジックとレンダリングの実装
 
-## Project Structure
+## プロジェクト構造
 
-The project is currently minimal with only:
-- `README.md` - Project documentation (currently empty)
-- `.git/` - Git repository configuration
+プロジェクトは現在最小限で、以下のみが含まれています：
+- `README.md` - プロジェクトドキュメント（現在は空）
+- `.git/` - Gitリポジトリ構成
 
-## Commands
+## コマンド
 
-- `npm test` - Run tests using Vitest
-- `npm run tscheck` - Type check with TypeScript
+- `npm test` - Vitestを使用してテストを実行
+- `npm run tscheck` - TypeScriptで型チェック
 
-## Package Management
+## パッケージ管理
 
-**IMPORTANT**: Always use exact versions for dependencies (no ^ or ~ prefixes) to ensure reproducible builds. When adding new dependencies:
-1. Install the package: `npm install <package>`
-2. Edit package.json to remove version prefixes (^ or ~)
-3. Commit both package.json and package-lock.json changes together
+**重要**: 再現可能なビルドを確保するため、依存関係には常に正確なバージョンを使用してください（^や~プレフィックスは使用しない）。新しい依存関係を追加する際は：
+1. パッケージをインストール: `npm install <package>`
+2. package.jsonを編集してバージョンプレフィックス（^や~）を削除
+3. package.jsonとpackage-lock.jsonの変更を一緒にコミット
 
-## Architecture Notes
+## アーキテクチャノート
 
-This is a greenfield project - the architecture and implementation approach are yet to be determined. Consider the following when implementing:
+これはグリーンフィールドプロジェクトです - アーキテクチャと実装アプローチはまだ決定されていません。実装時は以下を考慮してください：
 
-- Game loop and timing mechanisms
-- Rendering system (canvas, DOM manipulation, or terminal-based)
-- Input handling for snake movement
-- Collision detection and game state management
-- Score tracking and game restart functionality
+- ゲームループとタイミングメカニズム
+- レンダリングシステム（canvas、DOM操作、またはターミナルベース）
+- スネークの移動のための入力処理
+- 衝突検出とゲーム状態管理
+- スコア追跡とゲーム再開機能
