@@ -22,10 +22,10 @@ export const GAME_STATE_PLAYING = "playing";
 /** @type {string} ゲーム状態：ゲームオーバー */
 export const GAME_STATE_GAME_OVER = "gameOver";
 
-/** @type {Object} プレイヤー1の初期位置 */
+/** @type {{x: number, y: number}} プレイヤー1の初期位置 */
 export const PLAYER1_INITIAL_POSITION = { x: 10, y: 10 };
 
-/** @type {Object} プレイヤー2の初期位置 */
+/** @type {{x: number, y: number}} プレイヤー2の初期位置 */
 export const PLAYER2_INITIAL_POSITION = { x: 20, y: 20 };
 
 /** @type {string} プレイヤー1のスネークの色 */

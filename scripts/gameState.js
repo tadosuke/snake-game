@@ -1,11 +1,18 @@
 import {
   GRID_SIZE,
   FOOD_SCORE,
-  MAX_SHADOW_TRAIL_LENGTH,
-  SHADOW_OPACITY_DECAY,
   PLAYER1_INITIAL_POSITION,
   PLAYER2_INITIAL_POSITION,
 } from "./constants.js";
+import {
+  isWithinBounds,
+  checkSelfCollision,
+  checkSnakeCollision,
+  checkFoodCollision,
+  moveSnake,
+  isPositionOccupiedBySnakes,
+  generateRandomPosition,
+} from "./snake.js";
 
 /** @type {number} 行/列あたりのタイル数 */
 const TILE_COUNT = 600 / GRID_SIZE; // canvas.width / GRID_SIZE
@@ -96,29 +103,12 @@ export function generateFood(playerCount) {
     let newFood = { x: 0, y: 0 };
 
     while (!validPosition) {
-      newFood = {
-        x: Math.floor(Math.random() * TILE_COUNT),
-        y: Math.floor(Math.random() * TILE_COUNT),
-      };
-
+      newFood = generateRandomPosition();
       validPosition = true;
 
-      // スネーク1との衝突チェック
-      for (let segment of gameState.snake1) {
-        if (newFood.x === segment.x && newFood.y === segment.y) {
-          validPosition = false;
-          break;
-        }
-      }
-
-      // スネーク2との衝突チェック
-      if (validPosition) {
-        for (let segment of gameState.snake2) {
-          if (newFood.x === segment.x && newFood.y === segment.y) {
-            validPosition = false;
-            break;
-          }
-        }
+      // スネークとの衝突チェック
+      if (isPositionOccupiedBySnakes(newFood, gameState.snake1, gameState.snake2)) {
+        validPosition = false;
       }
 
       // 既存の食べ物との衝突チェック
@@ -153,53 +143,33 @@ export function moveSnake1(playerCount, gameRunning) {
   };
 
   // 境界チェック
-  if (
-    head.x < 0 ||
-    head.x >= TILE_COUNT ||
-    head.y < 0 ||
-    head.y >= TILE_COUNT
-  ) {
+  if (!isWithinBounds(head)) {
     return { collision: true, ateFood: false, newScore: gameState.score };
   }
 
   // 自己衝突チェック
-  for (let segment of gameState.snake1) {
-    if (head.x === segment.x && head.y === segment.y) {
-      return { collision: true, ateFood: false, newScore: gameState.score };
-    }
+  if (checkSelfCollision(head, gameState.snake1)) {
+    return { collision: true, ateFood: false, newScore: gameState.score };
   }
 
   // スネーク2との衝突チェック（2プレイヤーモードのみ）
   if (playerCount === 2) {
-    for (let segment of gameState.snake2) {
-      if (head.x === segment.x && head.y === segment.y) {
-        return { collision: true, ateFood: false, newScore: gameState.score };
-      }
+    if (checkSnakeCollision(head, gameState.snake2)) {
+      return { collision: true, ateFood: false, newScore: gameState.score };
     }
   }
-
-  gameState.snake1.unshift(head);
 
   // 食べ物との衝突チェック
+  const foodCollision = checkFoodCollision(head, gameState.foods);
   let ateFood = false;
-  for (let i = gameState.foods.length - 1; i >= 0; i--) {
-    if (head.x === gameState.foods[i].x && head.y === gameState.foods[i].y) {
-      gameState.score += FOOD_SCORE;
-      gameState.foods.splice(i, 1);
-      ateFood = true;
-      break;
-    }
+  if (foodCollision.collision) {
+    gameState.score += FOOD_SCORE;
+    gameState.foods.splice(foodCollision.foodIndex, 1);
+    ateFood = true;
   }
 
-  if (!ateFood) {
-    const tail = gameState.snake1.pop();
-    if (tail) {
-      gameState.shadowTrail1.unshift({ x: tail.x, y: tail.y });
-    }
-    if (gameState.shadowTrail1.length > MAX_SHADOW_TRAIL_LENGTH) {
-      gameState.shadowTrail1.pop();
-    }
-  }
+  // スネークを移動
+  moveSnake(gameState.snake1, gameState.dx1, gameState.dy1, ateFood, gameState.shadowTrail1);
 
   return { collision: false, ateFood, newScore: gameState.score };
 }
@@ -220,51 +190,31 @@ export function moveSnake2(gameRunning) {
   };
 
   // 境界チェック
-  if (
-    head.x < 0 ||
-    head.x >= TILE_COUNT ||
-    head.y < 0 ||
-    head.y >= TILE_COUNT
-  ) {
+  if (!isWithinBounds(head)) {
     return { collision: true, ateFood: false, newScore: gameState.score };
   }
 
   // 自己衝突チェック
-  for (let segment of gameState.snake2) {
-    if (head.x === segment.x && head.y === segment.y) {
-      return { collision: true, ateFood: false, newScore: gameState.score };
-    }
+  if (checkSelfCollision(head, gameState.snake2)) {
+    return { collision: true, ateFood: false, newScore: gameState.score };
   }
 
   // スネーク1との衝突チェック
-  for (let segment of gameState.snake1) {
-    if (head.x === segment.x && head.y === segment.y) {
-      return { collision: true, ateFood: false, newScore: gameState.score };
-    }
+  if (checkSnakeCollision(head, gameState.snake1)) {
+    return { collision: true, ateFood: false, newScore: gameState.score };
   }
-
-  gameState.snake2.unshift(head);
 
   // 食べ物との衝突チェック
+  const foodCollision = checkFoodCollision(head, gameState.foods);
   let ateFood = false;
-  for (let i = gameState.foods.length - 1; i >= 0; i--) {
-    if (head.x === gameState.foods[i].x && head.y === gameState.foods[i].y) {
-      gameState.score += FOOD_SCORE;
-      gameState.foods.splice(i, 1);
-      ateFood = true;
-      break;
-    }
+  if (foodCollision.collision) {
+    gameState.score += FOOD_SCORE;
+    gameState.foods.splice(foodCollision.foodIndex, 1);
+    ateFood = true;
   }
 
-  if (!ateFood) {
-    const tail = gameState.snake2.pop();
-    if (tail) {
-      gameState.shadowTrail2.unshift({ x: tail.x, y: tail.y });
-    }
-    if (gameState.shadowTrail2.length > MAX_SHADOW_TRAIL_LENGTH) {
-      gameState.shadowTrail2.pop();
-    }
-  }
+  // スネークを移動
+  moveSnake(gameState.snake2, gameState.dx2, gameState.dy2, ateFood, gameState.shadowTrail2);
 
   return { collision: false, ateFood, newScore: gameState.score };
 }
