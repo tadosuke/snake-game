@@ -5,7 +5,9 @@
   "main": "script.js",
   "scripts": {
     "test": "vitest run",
-    "tscheck": "tsc --noEmit"
+    "tscheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +17,8 @@
     "prettier": "3.6.2",
     "typescript": "5.8.3",
     "vitest": "3.2.4"
+  },
+  "dependencies": {
+    "eslint": "9.32.0"
   }
 }
